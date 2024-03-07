@@ -7,7 +7,6 @@ first_last_name varchar(150) not null,
 second_last_name varchar(150),
 birthdate date not null,
 
-
-
+primary key (id_user)
 
 )
