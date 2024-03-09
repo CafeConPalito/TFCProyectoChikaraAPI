@@ -1,3 +1,5 @@
+drop  schema if exists chikara;
+
 create schema if not exists chikara;
 
 use chikara;
@@ -57,33 +59,30 @@ constraint fk_userData_userNakama_b Foreign key (id_user_leader) references user
 -- OJO LOS TRIGERS DAN ERROR EL RESTO ESTA OK!
 
 
+/*
 delimiter //
-CREATE trigger make_nakama after update on user_nakama for each row
+CREATE trigger control_nakama after insert on user_nakama for each row
 
 BEGIN
 
+
+
+	-- si se siguen mutuamente
 	if new.is_followed_back is true then
-    
-		insert into user_nakama (id_user_follower,id_user_leader,is_followed_back,nakama_creation) values(
-		(new.id_user_leader,new.id_user_follower,true,now())
-		);
-        
-        -- update user_nakama set is_followed_back = true, nakama_creation = now() where id_nakama = new.id_nakama;
-        
+	
+        set new.is_followed_back = true;
+        set new.nakama_creation = now();
+       
+       	call insert_nakama_followed_back(new.id_user_follower,new.id_user_leader);
+       
 	end if;
 
-END//
-delimiter ;
 
-delimiter //
-CREATE trigger block_nakama after update on user_nakama for each row
-
-BEGIN
-	
 	-- bloquear
 	if new.is_blocked is true then
 		
-		update user_nakama set is_followed_back = false where id_nakama = new.id_nakama;
+		set new.is_followed_back = false;
+
 		update user_nakama set is_followed_back = false, you_are_bloked = true where id_user_leader = new.id_user_follower and id_user_follower = new.id_user_leader;
 		
 	end if;
@@ -91,11 +90,30 @@ BEGIN
 	-- desbloquear
 	if new.is_blocked is false then
 		
-		update user_nakama set is_followed_back = false where id_nakama = new.id_nakama;
+		set new.is_followed_back = false;
+
 		update user_nakama set is_followed_back = false, you_are_bloked = false where id_user_leader = new.id_user_follower and id_user_follower = new.id_user_leader;
 		
 	end if;
+*/
+
 
 END//
 delimiter ;
+
+
+/*
+DELIMITER //
+
+CREATE PROCEDURE insert_nakama_followed_back (in follower int, in leader INT)
+BEGIN
+ 
+	insert into user_nakama (id_user_follower,id_user_leader,is_followed_back,nakama_creation) values
+		(leader,follower,true,now());
+
+END //
+
+DELIMITER ;
+
+*/
 
