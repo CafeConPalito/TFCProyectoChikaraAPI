@@ -18,9 +18,14 @@ To get started with the TFGProyectoChikaraAPI project, follow these steps:
     ```
 2. Create a virtual environment:
 
+    Windows
     ```shell
     virtualenv .chikaraVenv
     ```
+   MacOs | Linux
+   ```shell
+    python3 -m venv .chikaraVenv
+   ```
 3. Activate the virtual environment(Windows):
 
     Windows
@@ -36,8 +41,14 @@ To get started with the TFGProyectoChikaraAPI project, follow these steps:
 
 4. Install the required dependencies:
 
+    Windows
     ```shell
     pip install -r requirements.txt
+    ```
+    MacOs | Linux
+
+    ```shell
+    pip3 install -r requirements.txt
     ```
 
 5. Start the APIREST:
@@ -45,3 +56,5 @@ To get started with the TFGProyectoChikaraAPI project, follow these steps:
     ```shell
     uvicorn main:app --reload
     ```
+
+
