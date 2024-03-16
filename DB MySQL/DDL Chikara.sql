@@ -8,7 +8,7 @@ create table if not exists user_data(
 id_user INT auto_increment not null,
 user_name varchar(150) not null,
 email varchar(300) not null,
-pass varchar (300) not null,
+pwd varchar (300) not null,
 first_name varchar(150) not null,
 first_last_name varchar(150) not null,
 second_last_name varchar(150),

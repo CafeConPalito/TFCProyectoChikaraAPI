@@ -1,6 +1,6 @@
 use chikara;
 
-INSERT INTO user_data (user_name, email, pass, first_name, first_last_name, second_last_name, birthdate, account_creation, is_premium) VALUES
+INSERT INTO user_data (user_name, email, pwd, first_name, first_last_name, second_last_name, birthdate, account_creation, is_premium) VALUES
 ('usuario1', 'usuario1@example.com', 'pass1', 'Nombre1', 'Apellido1', 'Apellido2', '1990-01-01', NOW(), true),
 ('usuario2', 'usuario2@example.com', 'pass2', 'Nombre2', 'Apellido3', 'Apellido4', '1985-05-15', NOW(), false),
 ('usuario3', 'usuario3@example.com', 'pass3', 'Nombre3', 'Apellido5', 'Apellido6', '1992-11-30', NOW(), true),

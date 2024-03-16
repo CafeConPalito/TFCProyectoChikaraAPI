@@ -51,7 +51,17 @@ To get started with the TFGProyectoChikaraAPI project, follow these steps:
     pip3 install -r requirements.txt
     ```
 
-5. Start the APIREST:
+5. Create a .env file in the root directory of the project and add the following parameters:
+
+    ```
+    DB_HOST=localhost
+    DB_PORT=3306
+    DB_NAME=chikara
+    DB_USER={user}
+    DB_PASSWORD={password}
+    ```
+
+6. Start the APIREST:
 
     ```shell
     uvicorn main:app --reload
