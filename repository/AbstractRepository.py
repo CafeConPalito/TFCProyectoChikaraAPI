@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
 class AbstractRepository(ABC):

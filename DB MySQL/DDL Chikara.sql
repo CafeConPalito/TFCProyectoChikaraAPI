@@ -6,8 +6,8 @@ use chikara;
 
 create table if not exists user_data(
 id_user INT auto_increment not null,
-user_name varchar(150) not null,
-email varchar(300) not null,
+user_name varchar(150) not null unique,
+email varchar(300) not null unique,
 pwd varchar (300) not null,
 first_name varchar(150) not null,
 first_last_name varchar(150) not null,
@@ -98,8 +98,8 @@ BEGIN
 */
 
 
-END//
-delimiter ;
+-- END//
+-- delimiter ;
 
 
 /*

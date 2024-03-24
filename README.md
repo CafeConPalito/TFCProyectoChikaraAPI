@@ -59,6 +59,13 @@ To get started with the TFGProyectoChikaraAPI project, follow these steps:
     DB_NAME=chikara
     DB_USER={user}
     DB_PASSWORD={password}
+
+    # Variables de mongodb
+    DB_USER_MONGO = {user}
+    DB_PASSWORD_MONGO= {password}
+    DB_CLUSTER = {url}
+    DB_NAME = ChikaraDB
+    DB_COLLECTION = chiks
     ```
 
 6. Start the APIREST:
