@@ -4,7 +4,7 @@ from datetime import date, datetime
 import uuid
 
 class UserDataSchema(BaseModel):
-	id: Optional[int]
+	id: Optional[uuid.UUID]
 	user_name: Optional[str]
 	email: Optional[str]
 	pwd: Optional[str]

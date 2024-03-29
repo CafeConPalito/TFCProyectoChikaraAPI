@@ -28,7 +28,7 @@ INSERT INTO user_log (id_user, log_out) VALUES
 */
 
 -- Estableciendo algunas relaciones de "nakama" entre usuarios.
-INSERT INTO user_nakama (id_user_follower, id_user_leader) VALUES
+/*INSERT INTO user_nakama (id_user_follower, id_user_leader) VALUES
 (1, 2),
 (2, 3),
 (3, 1),
@@ -38,5 +38,5 @@ INSERT INTO user_nakama (id_user_follower, id_user_leader) VALUES
 (8, 9),
 (9, 10),
 (10, 1),
-(1, 3);
+(1, 3);*/
 

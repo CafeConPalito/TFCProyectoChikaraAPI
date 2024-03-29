@@ -1,11 +1,18 @@
-drop  schema if exists chikara;
+-- drop database if exists chikara;
 
-create schema if not exists chikara;
+-- CREATE DATABASE chikara;
 
-use chikara;
+drop schema if exists chikara;
+
+CREATE schema if not exists chikara;
+
+
+SET search_path TO chikara;
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 create table if not exists user_data(
-id_user INT auto_increment not null,
+id_user UUID DEFAULT uuid_generate_v4(),
 user_name varchar(150) not null unique,
 email varchar(300) not null unique,
 pwd varchar (300) not null,
@@ -14,7 +21,7 @@ first_last_name varchar(150) not null,
 second_last_name varchar(150),
 birthdate date not null,
 
-account_creation DATETIME default now(),
+account_creation TIMESTAMP default now(),
 
 is_premium boolean default false,
 
@@ -22,10 +29,10 @@ primary key (id_user)
 );
 
 create table if not exists user_log(
-id_log INT auto_increment not null,
-id_user INT not null,
-log_in DATETIME default now(),
-log_out DATETIME,
+id_log UUID DEFAULT uuid_generate_v4(),
+id_user UUID not null,
+log_in TIMESTAMP default now(),
+log_out TIMESTAMP,
 
 primary key (id_log),
 constraint fk_userData_userLog Foreign key (id_user) references user_data(id_user) on update cascade on delete cascade
@@ -33,12 +40,12 @@ constraint fk_userData_userLog Foreign key (id_user) references user_data(id_use
 
 -- si solo es uno = follower
 create table if not exists user_nakama(
-id_nakama INT auto_increment not null,
-id_user_follower INT not null,
-id_user_leader INT not null,
-follow_creation DATETIME default now(),
+id_nakama UUID DEFAULT uuid_generate_v4(),
+id_user_follower UUID not null,
+id_user_leader UUID not null,
+follow_creation TIMESTAMP default now(),
 
-nakama_creation DATETIME,
+nakama_creation TIMESTAMP,
 
 -- bloquear la amistad, solo lo puede quitar el que bloquea
 is_blocked boolean default false,

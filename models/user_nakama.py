@@ -1,4 +1,6 @@
 from sqlalchemy import Column, Integer, DateTime, Boolean, ForeignKey, func
+from sqlalchemy.dialects.postgresql import UUID
+import uuid
 
 from config.db import Base
 
@@ -6,9 +8,9 @@ from config.db import Base
 class user_nakama(Base):
     __tablename__ = 'user_nakama'
 
-    id_nakama = Column('id_nakama',Integer, primary_key=True, autoincrement=True)
-    id_user_follower = Column(Integer, ForeignKey('user_data.id_user'), nullable=False)
-    id_user_leader = Column(Integer, ForeignKey('user_data.id_user'), nullable=False)
+    id_nakama = Column('id_nakama',UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
+    id_user_follower = Column(UUID(as_uuid=True), ForeignKey('user_data.id_user'), nullable=False)
+    id_user_leader = Column(UUID(as_uuid=True), ForeignKey('user_data.id_user'), nullable=False)
     follow_creation = Column(DateTime, default=func.now())
     nakama_creation = Column(DateTime)
     is_blocked = Column(Boolean, default=False)

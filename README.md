@@ -64,7 +64,7 @@ To get started with the TFGProyectoChikaraAPI project, follow these steps:
     DB_USER_MONGO = {user}
     DB_PASSWORD_MONGO= {password}
     DB_CLUSTER = {url}
-    DB_NAME = ChikaraDB
+    DB_NAME_MONGO = ChikaraDB
     DB_COLLECTION = chiks
     ```
 
