@@ -28,7 +28,6 @@ class chiksController:
     def getChikByAuthor(self, id: str, db: Collection = Depends(get_collection)):
         chiks = self.service.getChikByAuthor(db, id)
         if chiks:
-            print("returning chiks")
             return [chik for chik in chiks]
         raise HTTPException(status_code=404, detail="Chiks not found")
 

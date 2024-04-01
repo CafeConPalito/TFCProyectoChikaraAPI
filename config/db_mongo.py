@@ -14,12 +14,11 @@ DB_COLLECTION = os.getenv('DB_COLLECTION')
 
 uri = f"mongodb+srv://{DB_USER}:{DB_PASSWORD}@{DB_CLUSTER}?retryWrites=true&w=majority&appName=ClusterChikara"
 
-# Create a new client and connect to the server
-client = MongoClient(uri, server_api=ServerApi('1'))
-
 # Send a ping to confirm a successful connection
 def get_collection():
     try:
+        # Create a new client and connect to the server
+        client = MongoClient(uri, server_api=ServerApi('1'))
         yield client.get_database(DB_NAME).get_collection(DB_COLLECTION)
     finally:
         client.close()
