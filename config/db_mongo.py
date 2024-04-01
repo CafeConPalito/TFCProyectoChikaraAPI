@@ -9,7 +9,7 @@ load_dotenv()
 DB_USER = os.getenv('DB_USER_MONGO')
 DB_PASSWORD = os.getenv('DB_PASSWORD_MONGO')
 DB_CLUSTER = os.getenv('DB_CLUSTER')
-DB_NAME = os.getenv('DB_NAME')
+DB_NAME = os.getenv('DB_NAME_MONGO')
 DB_COLLECTION = os.getenv('DB_COLLECTION')
 
 uri = f"mongodb+srv://{DB_USER}:{DB_PASSWORD}@{DB_CLUSTER}?retryWrites=true&w=majority&appName=ClusterChikara"

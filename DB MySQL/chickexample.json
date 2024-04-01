@@ -1,6 +1,6 @@
 {
     "title": "Prueba Chik",
-    "author": 1,
+    "author": "156844a7-2be5-4208-b46d-7794fe698034",
     "date": "2024-03-21",
     "likes":12,
     "status":"public",
@@ -18,15 +18,15 @@
     ],
     "comments": [
         {
-            "user": 2,
+            "user": "c3b63b33-281c-403f-8129-0ea95e56682f",
             "comment": "Que chulo",
             "date": "2024-03-21"
         },
         {
-            "user": 3,
+            "user": "c28a49c1-63ae-4944-81d9-ba58f60741fa",
             "comment": "Que guay",
             "date": "2024-03-21"
         }
     ],
-    "mencions": [2, 3, 4]
+    "mencions": ["c3b63b33-281c-403f-8129-0ea95e56682f", "c28a49c1-63ae-4944-81d9-ba58f60741fa", "1cad1ea5-b411-4895-812d-f5c3bf696519"]
 }
