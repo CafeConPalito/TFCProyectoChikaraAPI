@@ -1,13 +1,13 @@
 -- drop database if exists chikara;
 
--- CREATE DATABASE chikara;
+-- CREATE DATABASE chikara; -- Descomentar, ejecutar solo esta linea y volver a comentar
 
-drop schema if exists chikara;
+-- drop schema if exists chikara;
 
-CREATE schema if not exists chikara;
+--CREATE schema if not exists chikara;
 
 
-SET search_path TO chikara;
+-- SET search_path TO chikara;
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 

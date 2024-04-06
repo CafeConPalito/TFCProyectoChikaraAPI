@@ -54,6 +54,7 @@ To get started with the TFGProyectoChikaraAPI project, follow these steps:
 5. Create a .env file in the root directory of the project and add the following parameters:
 
     ```
+    # Variables de PostgreSQL
     DB_HOST=localhost
     DB_PORT=3306
     DB_NAME=chikara
@@ -66,6 +67,10 @@ To get started with the TFGProyectoChikaraAPI project, follow these steps:
     DB_CLUSTER = {url}
     DB_NAME_MONGO = ChikaraDB
     DB_COLLECTION = chiks
+
+    # Variable jwt
+    KEY=cafeconpalito
+    EXPIRE_TIME=1
     ```
 
 6. Start the APIREST:

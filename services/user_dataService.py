@@ -12,8 +12,8 @@ class User_DataService():
     def getAllUsers(self, db: Session):
         return self.repository.get_all(db)
     
-    def getUserLogin(self, db: Session, email: str, password: str):
-        return self.repository.get_user_login(db, email, password)
+    def getUserLogin(self, db: Session, user: str, password: str):
+        return self.repository.get_user_login(db, user, password)
     
     def addUser(self, db: Session, user):
         user_in_data= jsonable_encoder(user)

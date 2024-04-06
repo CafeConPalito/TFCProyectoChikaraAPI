@@ -5,10 +5,11 @@ from pymongo.collection import Collection
 
 from config.db_mongo import get_collection
 
+from middlewares.verify_token_route import VerifyTokenRoute
 from schemas.chiksSchema import chiksSchema
 from services.chiksService import chiksService
 
-router= APIRouter()
+router= APIRouter(route_class=VerifyTokenRoute)
 
 @cbv(router)
 class chiksController:

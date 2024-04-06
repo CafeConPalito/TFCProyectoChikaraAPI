@@ -19,8 +19,21 @@ class user_data(Base):
     is_premium = Column(Boolean, default=False)
 
     def __repr__(self):
-        return (f"<UserData(id_user={self.id_user}, user_name='{self.user_name}', "
-                f"email='{self.email}', password='{self.password}', "
+        return (f"<UserData(id_user={self.id}, user_name='{self.user_name}', "
+                f"email='{self.email}', password='{self.pwd}', "
                 f"first_name='{self.first_name}', first_last_name='{self.first_last_name}', "
                 f"second_last_name='{self.second_last_name}', birthdate='{self.birthdate}', "
                 f"account_creation='{self.account_creation}', is_premium={self.is_premium})>")
+    
+    def dict(self):
+        return {
+            "id_user": str(self.id),
+            "user_name": self.user_name,
+            "email": self.email,
+            "first_name": self.first_name,
+            "first_last_name": self.first_last_name,
+            "second_last_name": self.second_last_name,
+            "birthdate": str(self.birthdate),
+            "account_creation": str(self.account_creation),
+            "is_premium": self.is_premium
+        }
