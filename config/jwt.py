@@ -29,3 +29,6 @@ def validate_token(token, output=False):
     except exceptions.ExpiredSignatureError:
         return JSONResponse(content={"message": "Token Expired"},
                             status_code=401)
+    
+def get_user_id(token):
+    return validate_token(token, True)["id_user"]

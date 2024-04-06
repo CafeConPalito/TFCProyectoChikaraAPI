@@ -9,7 +9,7 @@ class chiksRepository():
         return db.find()
     
     def get_top_chiks(self, db):
-        return db.find().sort("likes", -1).limit(10)
+        return db.find({"status": "public"}).sort("likes", -1).limit(10)
     
     def get_chik_by_author(self, db, id):
         return db.find({"author": id})
