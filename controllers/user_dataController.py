@@ -40,16 +40,13 @@ class user_dataController:
 	@router.get("/searchemail",response_model=bool,status_code=200)
 	def searchEmail(self,email:str, db: Session = Depends(get_db)):
 		result=self.service.findUserByEmail(db, email)
-		if result is None:
-			return False
-		return True
+		return True if result else False
+
 	
 	@router.get("/searchuser",response_model=bool,status_code=200)
 	def searchUser(self,user:str, db: Session = Depends(get_db)):
 		result=self.service.findUserByName(db, user)
-		if result is None:
-			return False
-		return True
+		return True if result else False
 	
 	@router.post("/register",response_model=UserDataSchemaSend,status_code=201)
 	def UserRegister(self, user: UserDataSchemaReceived, db: Session = Depends(get_db)):
