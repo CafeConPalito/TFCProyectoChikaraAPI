@@ -1,12 +1,12 @@
 from typing import List
 from fastapi_utils.cbv import cbv
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from sqlalchemy.orm import Session
 
 from config.jwt import generate_token
 from middlewares.verify_token_route import VerifyTokenRoute
 from models.user_data import user_data
-from schemas.UserDataSchema import UserDataSchema
+from schemas.UserDataSchema import UserDataSchemaReceived, UserDataSchemaSend
 from services.user_dataService import User_DataService
 from config.db_depend import get_db
 
@@ -37,8 +37,22 @@ class user_dataController:
 			raise HTTPException(status_code=404,detail="Not Found")
 		return generate_token(result.dict())
 	
-	@router.post("/register",response_model=UserDataSchema,status_code=201)
-	def UserRegister(self, user: UserDataSchema, db: Session = Depends(get_db)):
+	@router.get("/searchemail",response_model=bool,status_code=200)
+	def searchEmail(self,email:str, db: Session = Depends(get_db)):
+		result=self.service.findUserByEmail(db, email)
+		if result is None:
+			return False
+		return True
+	
+	@router.get("/searchuser",response_model=bool,status_code=200)
+	def searchUser(self,user:str, db: Session = Depends(get_db)):
+		result=self.service.findUserByName(db, user)
+		if result is None:
+			return False
+		return True
+	
+	@router.post("/register",response_model=UserDataSchemaSend,status_code=201)
+	def UserRegister(self, user: UserDataSchemaReceived, db: Session = Depends(get_db)):
 		result= self.service.addUser(db, user)
 		if result is None:
 			raise HTTPException(status_code=400,detail="Not Created")

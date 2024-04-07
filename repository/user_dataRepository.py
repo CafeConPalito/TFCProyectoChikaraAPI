@@ -32,6 +32,12 @@ class User_DataRepository(AbstractRepository):
                 return result
         else:
             return None
+        
+    def find_user_by_email(self, db, email: str):
+        return db.query(self.entity).filter(self.entity.email == email).first()
+    
+    def find_user_by_name(self, db, user: str):
+        return db.query(self.entity).filter(self.entity.user_name == user).first()
     
     # Con cifrado md5 en la password
     # No olvidar descomentar la importación de hashlib
