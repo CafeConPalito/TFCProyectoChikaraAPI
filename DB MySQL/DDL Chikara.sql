@@ -9,10 +9,10 @@
 
 -- SET search_path TO chikara;
 
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+-- CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 create table if not exists user_data(
-id_user UUID DEFAULT uuid_generate_v4(),
+id_user UUID, -- DEFAULT uuid_generate_v4(),
 user_name varchar(150) not null unique,
 email varchar(300) not null unique,
 pwd varchar (300) not null,
@@ -29,7 +29,7 @@ primary key (id_user)
 );
 
 create table if not exists user_log(
-id_log UUID DEFAULT uuid_generate_v4(),
+id_log UUID ,--DEFAULT uuid_generate_v4(),
 id_user UUID not null,
 log_in TIMESTAMP default now(),
 log_out TIMESTAMP,
@@ -38,9 +38,21 @@ primary key (id_log),
 constraint fk_userData_userLog Foreign key (id_user) references user_data(id_user) on update cascade on delete cascade
 );
 
+create table if not exists user_device(
+id_device UUID,
+id_user UUID not null,
+phone_id varchar(150) not null unique,
+phone_model varchar(150) not null,
+phone_brand varchar(150) not null,
+block bool not null default false,
+
+primary key (id_device),
+constraint fk_userData_userDevice Foreign key (id_user) references user_data(id_user) on update cascade on delete cascade
+);
+
 -- si solo es uno = follower
 create table if not exists user_nakama(
-id_nakama UUID DEFAULT uuid_generate_v4(),
+id_nakama UUID,-- DEFAULT uuid_generate_v4(),
 id_user_follower UUID not null,
 id_user_leader UUID not null,
 follow_creation TIMESTAMP default now(),

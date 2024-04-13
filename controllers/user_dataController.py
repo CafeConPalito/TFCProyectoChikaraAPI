@@ -1,8 +1,10 @@
+import datetime
 from typing import List
 from fastapi_utils.cbv import cbv
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from sqlalchemy.orm import Session
 
+from azure.communication.email import EmailClient
 from config.jwt import generate_token
 from middlewares.verify_token_route import VerifyTokenRoute
 from models.user_data import user_data
@@ -31,8 +33,11 @@ class user_dataController:
 	# 	return result
  
 	@router.get("/login",response_model=str,status_code=200)
-	def UserLogin(self, user: str, password: str, db: Session = Depends(get_db)):
-		result=self.service.getUserLogin(db, user, password)
+	def UserLogin(self,request:Request, user: str, password: str, db: Session = Depends(get_db)):
+		# phone_id = request.headers.get("phone_id")
+		# phone_model = request.headers.get("phone_model")
+		# phone_brand = request.headers.get("phone_brand")
+		result=self.service.getUserLogin(db,request, user, password)
 		if result is None:
 			raise HTTPException(status_code=404,detail="Not Found")
 		return generate_token(result.dict())
