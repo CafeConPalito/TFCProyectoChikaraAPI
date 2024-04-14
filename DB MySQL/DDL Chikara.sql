@@ -41,7 +41,7 @@ constraint fk_userData_userLog Foreign key (id_user) references user_data(id_use
 create table if not exists user_device(
 id_device UUID,
 id_user UUID not null,
-phone_id varchar(150) not null unique,
+phone_id varchar(150) not null,
 phone_model varchar(150) not null,
 phone_brand varchar(150) not null,
 block bool not null default false,

@@ -33,6 +33,5 @@ def sendEmail(result,device: user_devices):
     "<p>Si has sido tú quien inició sesión, ignora este mensaje.</p><br><p>Este es un mensaje automático. Por favor, no responder a este correo electrónico.</p></body></html>"
     }
     }
-    print(message)
     poller = email.begin_send(message)
     resultemail = poller.result()
