@@ -42,17 +42,13 @@ class user_dataController:
 			raise HTTPException(status_code=404,detail="Not Found")
 		return generate_token(result.dict())
 	
-	@router.get("/searchemail",response_model=bool,status_code=200)
-	def searchEmail(self,email:str, db: Session = Depends(get_db)):
-		result=self.service.findUserByEmail(db, email)
-		return True if result else False
-
-	
-	@router.get("/searchuser",response_model=bool,status_code=200)
+	@router.get("/search",response_model=bool,status_code=200)
 	def searchUser(self,user:str, db: Session = Depends(get_db)):
 		result=self.service.findUserByName(db, user)
+		if result is None:
+			result=self.service.findUserByEmail(db, user)
 		return True if result else False
-	
+
 	@router.post("/register",response_model=UserDataSchemaSend,status_code=201)
 	def UserRegister(self, user: UserDataSchemaReceived, db: Session = Depends(get_db)):
 		result= self.service.addUser(db, user)
