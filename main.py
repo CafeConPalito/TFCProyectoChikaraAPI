@@ -7,7 +7,7 @@ from routers.routers import api_router
 
 app = FastAPI(root_path="/api/v1")
 app.title = "Chikara API"
-app.version = "0.1.0"
+app.version = "0.1.3"
 app.description = "API REST para el manejo de usuarios y chiks en la aplicación multiplataforma Chikara"
 
 startLogger()

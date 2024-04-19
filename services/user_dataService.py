@@ -3,7 +3,7 @@ import threading
 from fastapi import Request, logger
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
-from config.email import sendEmail
+from config.email import sendEmailBlock, sendEmailUnBlock
 from models.user_data import user_data
 from repository.user_dataRepository import User_DataRepository
 from azure.communication.email import EmailClient
@@ -18,11 +18,16 @@ class User_DataService():
         return self.repository.get_all(db)
     
     def getUserLogin(self, db: Session,request: Request, user: str, password: str):
-        result,control=self.repository.get_user_login(db,request, user, password)
-        if control is not None:
-            #Enviamos email de inicio de sesion
-            hiloemail = threading.Thread(target=sendEmail, args=(result,control))
+        result,device,bloqueado=self.repository.get_user_login(db,request, user, password)
+        if bloqueado:
+            hiloemail = threading.Thread(target=sendEmailUnBlock, args=(result,device))
             hiloemail.start()
+            return None
+        if device is not None:
+            #Enviamos email de inicio de sesion
+            hiloemail = threading.Thread(target=sendEmailBlock, args=(result,device))
+            hiloemail.start()
+        
         return result
     
     def findUserByEmail(self, db: Session, email: str):

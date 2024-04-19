@@ -43,7 +43,7 @@ class user_dataController:
 		return generate_token(result.dict())
 	
 	@router.get("/search",response_model=bool,status_code=200)
-	def searchUser(self,user:str, db: Session = Depends(get_db)):
+	def search(self,user:str, db: Session = Depends(get_db)):
 		#Buscar por usarname
 		result=self.service.findUserByName(db, user)
 		#Si no se encuentra buscar por email

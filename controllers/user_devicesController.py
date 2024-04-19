@@ -27,3 +27,10 @@ class user_devicesController:
         if result is None:
             raise HTTPException(status_code=404,detail="Not Found")
         return result
+    
+    @router.get("/unblock/{id}",response_model=str,status_code=200)
+    def unblockDevice(self,id:str, db: Session = Depends(get_db)):
+        result=self.service.unblockDevice(db,id)
+        if result is None:
+            raise HTTPException(status_code=404,detail="Not Found")
+        return result

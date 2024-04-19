@@ -37,12 +37,12 @@ class User_DataRepository(AbstractRepository):
                                                 phone_model=request.headers.get("phone_model"),phone_brand=request.headers.get("phone_brand"))
                     #Añade un nuevo registro en la tabla user_devices
                     device=self.user_devicesRepository.add(userdevicesnew,db)
-                    return result,device
+                    return result,device,False
                 else:
                     #Comprueba si el dispositivo está bloqueado
                     if device_db.block==True:
-                        return None,None
-                    return result,None
+                        return result,device_db,True
+                    return result,None,False
 
         else:
             result= db.query(self.entity).filter(self.entity.email == user, self.entity.pwd == password).first()
@@ -65,8 +65,8 @@ class User_DataRepository(AbstractRepository):
                 else:
                     #Comprueba si el dispositivo está bloqueado
                     if device_db.block==True:
-                        return None,None
-                    return result,None
+                        return result,device_db,True
+                    return result,None,False
 
    
     def find_user_by_email(self, db, email: str):
