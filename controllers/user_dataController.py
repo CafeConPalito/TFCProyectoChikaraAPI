@@ -44,10 +44,33 @@ class user_dataController:
 	
 	@router.get("/search",response_model=bool,status_code=200)
 	def searchUser(self,user:str, db: Session = Depends(get_db)):
+		#Buscar por usarname
 		result=self.service.findUserByName(db, user)
+		#Si no se encuentra buscar por email
 		if result is None:
 			result=self.service.findUserByEmail(db, user)
-		return True if result else False
+			#Si no se encuentra lanzar error 404 Not found
+			if result is None:
+				raise HTTPException(status_code=404,detail="Not Found")
+		return True
+	
+	@router.get("/searchuser",response_model=bool,status_code=200)
+	def searchUser(self,user:str, db: Session = Depends(get_db)):
+		#Buscar por usarname
+		result=self.service.findUserByName(db, user)
+		#Si no se encuentra buscar por email
+		if result is None:
+			raise HTTPException(status_code=404,detail="Not Found")
+		return True
+	
+	@router.get("/searchemail",response_model=bool,status_code=200)
+	def searchEmail(self,email:str, db: Session = Depends(get_db)):
+		#Buscar por usarname
+		result=self.service.findUserByEmail(db, email)
+		#Si no se encuentra buscar por email
+		if result is None:
+			raise HTTPException(status_code=404,detail="Not Found")
+		return True
 
 	@router.post("/register",response_model=UserDataSchemaSend,status_code=201)
 	def UserRegister(self, user: UserDataSchemaReceived, db: Session = Depends(get_db)):
