@@ -3,6 +3,7 @@ import os
 from azure.communication.email import EmailClient
 from dotenv import load_dotenv
 
+from models.user_data import user_data
 from models.user_devices import user_devices
 
 load_dotenv()
@@ -64,3 +65,24 @@ def sendEmailUnBlock(result,device: user_devices):
     }
     poller = email.begin_send(message)
     resultemail = poller.result()
+
+def sendEmailWelcome(useremail:str,user_name:str):
+    email = EmailClient.from_connection_string(os.getenv('connection_string'))
+
+    message = {
+    "senderAddress": os.getenv('email'),
+    "recipients":  {
+    "to": [{"address": useremail }],
+    },
+    "content": {
+    "subject": "Bienvenido a chikara",
+    "html": "<html><head></head><body><h1>Bienvenido a chikara</h1><br><h2>Hola "+user_name+",</h2><br>"+
+    "<p>Gracias por registrarte en chikara.</p>"+
+    "<p>Esperamos que disfrutes de la experiencia y que encuentres la motivación que buscas.</p>"+
+    "<p>Si tienes alguna duda o problema, no dudes en contactar con CafeConPalito</p>"+
+    "<p>Un saludo.</p><br><p>Este es un mensaje automático. Por favor, no responder a este correo electrónico.</p></body></html>"
+    }
+    }
+    poller = email.begin_send(message)
+    resultemail = poller.result()
+    print(resultemail)

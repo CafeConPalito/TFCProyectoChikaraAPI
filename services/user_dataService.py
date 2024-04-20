@@ -3,7 +3,7 @@ import threading
 from fastapi import Request, logger
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
-from config.email import sendEmailBlock, sendEmailUnBlock
+from config.email import sendEmailBlock, sendEmailUnBlock, sendEmailWelcome
 from models.user_data import user_data
 from repository.user_dataRepository import User_DataRepository
 from azure.communication.email import EmailClient
@@ -40,7 +40,11 @@ class User_DataService():
         user_in_data= jsonable_encoder(user)
         newuser =user_data(**user_in_data)
         try:
-            return self.repository.add(newuser, db)
+            result= self.repository.add(newuser, db)
+            if result:
+                hiloemail = threading.Thread(target=sendEmailWelcome, args=(newuser.email,newuser.user_name))
+                hiloemail.start()
+            return True
         except:
             return None
         

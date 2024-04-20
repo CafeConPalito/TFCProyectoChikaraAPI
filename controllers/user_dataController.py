@@ -72,9 +72,9 @@ class user_dataController:
 			raise HTTPException(status_code=404,detail="Not Found")
 		return True
 
-	@router.post("/register",response_model=UserDataSchemaSend,status_code=201)
+	@router.post("/register",response_model=bool,status_code=201)
 	def UserRegister(self, user: UserDataSchemaReceived, db: Session = Depends(get_db)):
 		result= self.service.addUser(db, user)
 		if result is None:
 			raise HTTPException(status_code=400,detail="Not Created")
-		return result
+		return True
