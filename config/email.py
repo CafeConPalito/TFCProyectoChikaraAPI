@@ -86,25 +86,24 @@ def sendEmailWelcome(useremail:str,user_name:str):
     poller = email.begin_send(message)
     resultemail = poller.result()
 
-# def sendEmailResetPassword(useremail:str,user_name:str,url:str):
-#     email = EmailClient.from_connection_string(os.getenv('connection_string'))
+def sendEmailRecovery(useremail:str,user_name:str):
+    email = EmailClient.from_connection_string(os.getenv('connection_string'))
 
-#     message = {
-#     "senderAddress": os.getenv('email'),
-#     "recipients":  {
-#     "to": [{"address": useremail }],
-#     },
-#     "content": {
-#     "subject": "Reseteo de contraseña en chikara",
-#     "html": "<html><head></head><body><h1>Reseteo de contraseña en chikara</h1><br><h2>Hola "+user_name+",</h2><br>"+
-#     "<p>Has solicitado un reseteo de contraseña en chikara.</p>"+
-#     "<p>Para resetear tu contraseña, haz clic en el siguiente enlace:</p>"+
-#     f'<a href="{url}" target="_blank">Resetear contraseña</a>'+
-#     "<p>Si no has sido tú quien solicitó el reseteo, ignora este mensaje.</p><br><p>Este es un mensaje automático. Por favor, no responder a este correo electrónico.</p></body></html>"
-#     }
-#     }
-#     poller = email.begin_send(message)
-#     resultemail = poller.result()
+    message = {
+    "senderAddress": os.getenv('email'),
+    "recipients":  {
+    "to": [{"address": useremail }],
+    },
+    "content": {
+    "subject": "Recuperación de contraseña",
+    "html": "<html><head></head><body><h1>Recuperación de contraseña</h1><br><h2>Hola "+user_name+",</h2><br>"+
+    "<p>Has solicitado recuperar tu contraseña en chikara.</p>"+
+    "<p>Hemos cambiado con exito tu contraseña por la que nos has proporcionado.</p>"+
+    "<p>Un saludo.</p><br><p>Este es un mensaje automático. Por favor, no responder a este correo electrónico.</p></body></html>"
+    }
+    }
+    poller = email.begin_send(message)
+    resultemail = poller.result()
 
 def sendEmailBirthday(useremail:str,user_name:str):
     email= EmailClient.from_connection_string(os.getenv('connection_string'))

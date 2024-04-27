@@ -78,3 +78,13 @@ class user_dataController:
 		if result is None:
 			raise HTTPException(status_code=400,detail="Not Created")
 		return True
+	
+	@router.put("/recovery",response_model=bool,status_code=200)
+	def recovery(self,email:str,username:str,pwd:str, db: Session = Depends(get_db)):
+		#Buscar por email
+		result=self.service.recovery(db, email,username,pwd)
+		#Si no se encuentra lanzar error 404 Not found
+		if result is None:
+			raise HTTPException(status_code=404,detail="Not Found")
+		return True
+	

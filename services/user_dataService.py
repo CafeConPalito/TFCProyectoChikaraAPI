@@ -3,7 +3,7 @@ import threading
 from fastapi import Request, logger
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
-from config.email import sendEmailBlock, sendEmailUnBlock, sendEmailWelcome
+from config.email import sendEmailBlock, sendEmailRecovery, sendEmailUnBlock, sendEmailWelcome
 from models.user_data import user_data
 from repository.user_dataRepository import User_DataRepository
 from azure.communication.email import EmailClient
@@ -47,4 +47,18 @@ class User_DataService():
             return True
         except:
             return None
+        
+    def recovery(self,db:Session, email:str,username:str,pwd:str):
+        result=self.repository.find_user_by_email(db, email)
+        #Compruebo que el email y el username coinciden
+        if result.user_name!=username:
+            return None
+        if result is not None:
+            entity={"pwd":pwd}
+            self.repository.update(entity,result.id,db)
+            hiloemail = threading.Thread(target=sendEmailRecovery, args=(result.email,result.user_name))
+            hiloemail.start()
+            return True
+        return None
+    
         
