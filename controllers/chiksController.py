@@ -56,9 +56,12 @@ class chiksController:
         if not files:
             raise HTTPException(status_code=404, detail="No files found")
         for file in files:
-            data= await file.read()
-            upload_blob(f"{cont}.webp","image/webp",data)
-            cont+=1
+            if file.filename:
+                data= await file.read()
+                upload_blob(f"{cont}.webp","image/webp",data)
+                cont+=1
+            else:
+                cont+=1
 
         list_blobs()
         
