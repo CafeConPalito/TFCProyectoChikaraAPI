@@ -28,16 +28,15 @@ class chiksController:
     def getTopChiks(self, db: Collection = Depends(get_collection)):
         result=[]
         for chiks in self.service.getTopChiks(db):
-            chiks["id"]=str(chiks["_id"])
+            chiks["_id"]=str(chiks["_id"])
             result.append(chiks)
         return result
     
     @router.get("/findbyauthor",response_model=List[chiksSchema],status_code=200)
-    def getChikByAuthor(self,request:Request, id: Union[str,None]= None, db: Collection = Depends(get_collection)):
-        if id is None:
-            id= get_user_id(request.headers["Authorization"].split(" ")[1])
+    def getChikByAuthor(self,request:Request, db: Collection = Depends(get_collection)):
+        user_id= get_user_id(request.headers["Authorization"].split(" ")[1])
 
-        chiks = self.service.getChikByAuthor(db, id)
+        chiks = self.service.getChikByAuthor(db, user_id)
         if chiks:
             result=[]
             for chiks in self.service.getTopChiks(db):

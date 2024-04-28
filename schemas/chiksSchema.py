@@ -2,7 +2,7 @@ from typing import List, Optional, Union
 from datetime import date
 import uuid
 from bson import ObjectId
-from pydantic import BaseModel, BaseSettings, Field
+from pydantic import BaseConfig, BaseModel, BaseSettings, Field
 
 # def chikSchema(item)->dict:
 #     return {
@@ -19,7 +19,6 @@ from pydantic import BaseModel, BaseSettings, Field
 
 # def chiksSchema(item)->list:
 #     return [chikSchema(item) for item in item]
-
 class Content(BaseModel):
     position: int
     value: str
@@ -31,8 +30,7 @@ class Comment(BaseModel):
     date: date
 
 class chiksSchema(BaseModel):
-    _id: str
-    id: str
+    id: str = Field(..., alias="_id")
     title: str
     author: Optional[uuid.UUID]
     date: Optional[date]
