@@ -71,6 +71,16 @@ To get started with the TFGProyectoChikaraAPI project, follow these steps:
     # Variable jwt
     KEY=cafeconpalito
     EXPIRE_TIME=1
+
+    # Variables de correo
+    connection_string={url_connection}
+    email={email}
+    url={url_web_app}
+
+    # Variables Blob Storage
+    STORAGE_CONTAINER="chiks"
+    STORAGE_URL={url}
+    STORAGE_CONNECTION_STRING={url_connection}
     ```
 
 6. Start the APIREST:
