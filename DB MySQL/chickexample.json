@@ -3,17 +3,17 @@
     "author": "156844a7-2be5-4208-b46d-7794fe698034",
     "date": "2024-03-21",
     "likes":12,
-    "status":"public",
+    "isprivate":true,
     "content":[
         {
             "position":1,
-            "content":"Dejar las chuches",
-            "type":"text"
+            "value":"Dejar las chuches",
+            "type":"TYPE_TEXT"
         },
         {
             "position":2,
-            "content":"https://www.giantfreakinrobot.com/wp-content/uploads/2022/06/hellotherethumb.jpg",
-            "type":"img"
+            "value":"https://www.giantfreakinrobot.com/wp-content/uploads/2022/06/hellotherethumb.jpg",
+            "type":"TYPE_IMG"
         }
     ],
     "comments": [

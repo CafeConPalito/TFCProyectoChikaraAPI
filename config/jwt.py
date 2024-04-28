@@ -1,9 +1,11 @@
+from fastapi.security import HTTPBearer
 from jwt import encode, decode
 from jwt import exceptions
 from datetime import datetime, timedelta, timezone
 from fastapi.responses import JSONResponse
 from decouple import config
 
+oauth2_scheme = HTTPBearer()
 
 def parse_expire_date(hour: int):
     date = datetime.now(timezone.utc)

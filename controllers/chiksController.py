@@ -1,11 +1,13 @@
-from typing import List, Union
+from typing import List, Optional, Union
 from fastapi_utils.cbv import cbv
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, File, HTTPException, Request, UploadFile
 from pymongo.collection import Collection
 
+from config.blob import list_blobs, upload_blob
 from config.db_mongo import get_collection
 
 from config.jwt import get_user_id
+from decorators.decorator import Security
 from middlewares.verify_token_route import VerifyTokenRoute
 from schemas.chiksSchema import chiksSchema
 from services.chiksService import chiksService
@@ -24,16 +26,43 @@ class chiksController:
 
     @router.get("/top",response_model=List[chiksSchema],status_code=200)
     def getTopChiks(self, db: Collection = Depends(get_collection)):
-        return [chiks for chiks in self.service.getTopChiks(db)]
+        result=[]
+        for chiks in self.service.getTopChiks(db):
+            chiks["id"]=str(chiks["_id"])
+            result.append(chiks)
+        return result
     
-    @router.get("/you",response_model=List[chiksSchema],status_code=200)
+    @router.get("/findbyauthor",response_model=List[chiksSchema],status_code=200)
     def getChikByAuthor(self,request:Request, id: Union[str,None]= None, db: Collection = Depends(get_collection)):
         if id is None:
             id= get_user_id(request.headers["Authorization"].split(" ")[1])
 
         chiks = self.service.getChikByAuthor(db, id)
         if chiks:
-            return [chik for chik in chiks]
+            result=[]
+            for chiks in self.service.getTopChiks(db):
+                chiks["id"]=str(chiks["_id"])
+                result.append(chiks)
+            return result
         raise HTTPException(status_code=404, detail="Chiks not found")
+    
+    # @router.post("/create",response_model=str,status_code=200)
+    # def createChik(self,request:Request, chik: chiksSchema, db: Collection = Depends(get_collection)):
+    #     chik.author= get_user_id(request.headers["Authorization"].split(" ")[1])
+    #     return self.service.uploadChik(db, chik)
+
+    @router.post("/upload",status_code=200)
+    async def uploadfiles(self,files:Optional[List[UploadFile]]=None):
+        cont=1
+        if not files:
+            raise HTTPException(status_code=404, detail="No files found")
+        for file in files:
+            data= await file.read()
+            upload_blob(f"{cont}.webp","image/webp",data)
+            cont+=1
+
+        list_blobs()
+        
+            
 
 	
