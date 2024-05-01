@@ -43,6 +43,8 @@ class User_DataRepository(AbstractRepository):
                     if device_db.block==True:
                         return result,device_db,True
                     return result,None,False
+            else:
+                return None,None,False
 
         else:
             result= db.query(self.entity).filter(self.entity.email == user, self.entity.pwd == password).first()
@@ -67,6 +69,8 @@ class User_DataRepository(AbstractRepository):
                     if device_db.block==True:
                         return result,device_db,True
                     return result,None,False
+            else:
+                return None,None,False
 
    
     def find_user_by_email(self, db, email: str):

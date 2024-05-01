@@ -21,7 +21,7 @@ first_last_name varchar(150) not null,
 second_last_name varchar(150),
 birthdate date not null,
 
-account_creation TIMESTAMP default now(),
+account_creation timestamptz default now(),
 
 is_premium boolean default false,
 
@@ -31,8 +31,8 @@ primary key (id_user)
 create table if not exists user_log(
 id_log UUID ,--DEFAULT uuid_generate_v4(),
 id_user UUID not null,
-log_in TIMESTAMP default now(),
-log_out TIMESTAMP,
+log_in timestamptz default now(),
+log_out timestamptz,
 
 primary key (id_log),
 constraint fk_userData_userLog Foreign key (id_user) references user_data(id_user) on update cascade on delete cascade

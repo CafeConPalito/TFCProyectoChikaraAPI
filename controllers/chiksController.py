@@ -1,6 +1,7 @@
-from typing import List, Optional, Union
+from datetime import datetime
+from typing import Annotated, List, Optional, Union
 from fastapi_utils.cbv import cbv
-from fastapi import APIRouter, Depends, File, HTTPException, Request, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, Request, UploadFile
 from pymongo.collection import Collection
 
 from config.blob import list_blobs, upload_blob
@@ -12,7 +13,7 @@ from middlewares.verify_token_route import VerifyTokenRoute
 from schemas.chiksSchema import chiksSchema
 from services.chiksService import chiksService
 
-router= APIRouter(route_class=VerifyTokenRoute)
+router= APIRouter()
 
 @cbv(router)
 class chiksController:
@@ -26,11 +27,14 @@ class chiksController:
 
     @router.get("/top",response_model=List[chiksSchema],status_code=200)
     def getTopChiks(self, db: Collection = Depends(get_collection)):
-        result=[]
-        for chiks in self.service.getTopChiks(db):
-            chiks["_id"]=str(chiks["_id"])
-            result.append(chiks)
-        return result
+        chiks= self.service.getTopChiks(db)
+        if chiks:
+            result=[]
+            for chik in chiks:
+                result.append(chik)
+            return result
+        raise HTTPException(status_code=404, detail="Chiks not found")
+
     
     @router.get("/findbyauthor",response_model=List[chiksSchema],status_code=200)
     def getChikByAuthor(self,request:Request, db: Collection = Depends(get_collection)):
@@ -39,31 +43,38 @@ class chiksController:
         chiks = self.service.getChikByAuthor(db, user_id)
         if chiks:
             result=[]
-            for chiks in self.service.getTopChiks(db):
-                chiks["id"]=str(chiks["_id"])
-                result.append(chiks)
+            for chik in chiks:
+                result.append(chik)
             return result
         raise HTTPException(status_code=404, detail="Chiks not found")
     
-    # @router.post("/create",response_model=str,status_code=200)
-    # def createChik(self,request:Request, chik: chiksSchema, db: Collection = Depends(get_collection)):
-    #     chik.author= get_user_id(request.headers["Authorization"].split(" ")[1])
-    #     return self.service.uploadChik(db, chik)
+    @router.post("/create",response_model=chiksSchema,status_code=200)
+    def createChik(self,request:Request,newchik:chiksSchema , db: Collection = Depends(get_collection)):
+        #Insertar el id del usuario que esta creando el chik
+        newchik.author= get_user_id(request.headers["Authorization"].split(" ")[1])
 
-    @router.post("/upload",status_code=200)
-    async def uploadfiles(self,files:Optional[List[UploadFile]]=None):
-        cont=1
-        if not files:
-            raise HTTPException(status_code=404, detail="No files found")
-        for file in files:
-            if file.filename:
-                data= await file.read()
-                upload_blob(f"{cont}.webp","image/webp",data)
-                cont+=1
-            else:
-                cont+=1
+        #Con los datos del chik, se procede a insertar en Mongo Atlas
+        chiks=self.service.uploadChik(db, newchik)
 
-        list_blobs()
+        #Si se inserto correctamente, se retorna el chik creado
+        if chiks:
+            return chiks
+        raise HTTPException(status_code=401, detail="Not created")
+
+    # @router.post("/upload",status_code=200)
+    # async def uploadfiles(self,files:Optional[List[UploadFile]]=None):
+    #     cont=1
+    #     if not files:
+    #         raise HTTPException(status_code=404, detail="No files found")
+    #     for file in files:
+    #         if file.filename:
+    #             data= await file.read()
+    #             upload_blob(f"{cont}.webp","image/webp",data)
+    #             cont+=1
+    #         else:
+    #             cont+=1
+
+    #     list_blobs()
         
             
 

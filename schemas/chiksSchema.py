@@ -21,7 +21,7 @@ from pydantic import BaseConfig, BaseModel, BaseSettings, Field
 #     return [chikSchema(item) for item in item]
 class Content(BaseModel):
     position: int
-    value: str
+    value: Union[str, bytes]
     type: str
 
 class Comment(BaseModel):
@@ -32,9 +32,9 @@ class Comment(BaseModel):
 class chiksSchema(BaseModel):
     id: str = Field(..., alias="_id")
     title: str
-    author: Optional[uuid.UUID]
-    date: Optional[date]
-    likes: int
+    author: Optional[str]=None
+    date: Optional[str]=None
+    likes: Optional[int]
     isprivate: bool
     content: List[Content]
     comments: List[Comment]
