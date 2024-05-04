@@ -1,8 +1,14 @@
+import base64
 from datetime import datetime
+import os
 import uuid
+from dotenv import load_dotenv
 from fastapi.encoders import jsonable_encoder
+from config.blob import upload_blob
 from repository.chiksRepository import chiksRepository
 from pymongo.collection import Collection
+
+from schemas.chiksSchema import chiksSchema
 
 
 class chiksService():
@@ -19,13 +25,25 @@ class chiksService():
     def getChikByAuthor(self, db: Collection, id: str):
         return self.repository.get_chik_by_author(db, id)
     
-    def uploadChik(self, db: Collection, chik, files: list):
+    def uploadChik(self, db: Collection, chik:chiksSchema):
+        load_dotenv()
+        STORAGE_URL = os.getenv("STORAGE_URL")
         #Generar un id unico
         chik.id=str(uuid.uuid4())
         #Insertar la fecha actual
         chik.date=datetime.now().date()
         #Poner el contador de likes en 0
         chik.likes=0
+        for content in chik.content:
+            if content.type=="TYPE_IMG":
+                #Obtener valor de la imagen en base64 y subir a Azure Blob Storage
+                upload_blob(f"{chik.id}/{content.position}.webp","image/webp",base64.b64decode(content.value))
+                content.value=f"{STORAGE_URL}/{chik.id}/{content.position}.webp"
+
+                #Convertir a bytes
+            elif content.type=="TYPE_TEXT":
+                continue
+
         db.insert_one(jsonable_encoder(chik))
         
         return db.find_one({"_id":chik.id})
