@@ -68,6 +68,27 @@ class chiksController:
         if chiks:
             return chiks
         raise HTTPException(status_code=401, detail="Not created")
+    
+    @router.post("/addmencion",response_model=chiksSchema,status_code=200)
+    def addMencion(self,id:str, mencion:str, db: Collection = Depends(get_collection)):
+        chiks=self.service.addMencion(db, id, mencion)
+        if chiks:
+            return chiks
+        raise HTTPException(status_code=401, detail="Not created")
+    
+    @router.post("/addlike",response_model=chiksSchema,status_code=200)
+    def addLike(self,id:str, db: Collection = Depends(get_collection)):
+        chiks=self.service.addLike(db, id)
+        if chiks:
+            return chiks
+        raise HTTPException(status_code=401, detail="Not created")
+    
+    @router.post("/deletelike",response_model=chiksSchema,status_code=200)
+    def deleteLike(self,id:str, db: Collection = Depends(get_collection)):
+        chiks=self.service.deleteLike(db, id)
+        if chiks:
+            return chiks
+        raise HTTPException(status_code=401, detail="Not created")
 
         
             
