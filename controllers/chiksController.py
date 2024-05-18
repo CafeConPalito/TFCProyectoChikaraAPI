@@ -10,7 +10,7 @@ from config.db_mongo import get_collection
 from config.jwt import get_user_id
 from decorators.decorator import Security
 from middlewares.verify_token_route import VerifyTokenRoute
-from schemas.chiksSchema import chiksSchema
+from schemas.chiksSchema import Comment, chiksSchema
 from services.chiksService import chiksService
 
 router= APIRouter()
@@ -60,21 +60,15 @@ class chiksController:
         if chiks:
             return chiks
         raise HTTPException(status_code=401, detail="Not created")
+    
+    @router.post("/addcomment",response_model=chiksSchema,status_code=200)
+    def addComment(self,request:Request, id:str, comment:Comment, db: Collection = Depends(get_collection)):
+        user_id= get_user_id(request.headers["Authorization"].split(" ")[1])
+        chiks=self.service.addComment(db, id, user_id, comment)
+        if chiks:
+            return chiks
+        raise HTTPException(status_code=401, detail="Not created")
 
-    # @router.post("/upload",status_code=200)
-    # async def uploadfiles(self,files:Optional[List[UploadFile]]=None):
-    #     cont=1
-    #     if not files:
-    #         raise HTTPException(status_code=404, detail="No files found")
-    #     for file in files:
-    #         if file.filename:
-    #             data= await file.read()
-    #             upload_blob(f"{cont}.webp","image/webp",data)
-    #             cont+=1
-    #         else:
-    #             cont+=1
-
-    #     list_blobs()
         
             
 

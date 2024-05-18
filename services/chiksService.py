@@ -8,7 +8,7 @@ from config.blob import upload_blob
 from repository.chiksRepository import chiksRepository
 from pymongo.collection import Collection
 
-from schemas.chiksSchema import chiksSchema
+from schemas.chiksSchema import Comment, chiksSchema
 
 
 class chiksService():
@@ -47,3 +47,9 @@ class chiksService():
         db.insert_one(jsonable_encoder(chik))
         
         return db.find_one({"_id":chik.id})
+    
+    def addComment(self, db: Collection, id:str,user_id:str, comment:Comment):
+        comment.user=user_id
+        comment.date=str(datetime.now().date())
+        db.update_one({"_id":id}, {"$push": {"comments": comment.dict()}})
+        return db.find_one({"_id":id})
