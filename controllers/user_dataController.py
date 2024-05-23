@@ -1,16 +1,18 @@
 import datetime
 from typing import List
 from fastapi_utils.cbv import cbv
-from fastapi import APIRouter, Depends, HTTPException, Request, Response
+from fastapi import APIRouter, Depends, HTTPException, Header, Request, Response
 from sqlalchemy.orm import Session
 
 from azure.communication.email import EmailClient
-from config.jwt import generate_token
-from middlewares.verify_token_route import VerifyTokenRoute
+from config.jwt import generate_token, get_user_id
+from decorators.decorator import security, oauth2_scheme
 from models.user_data import user_data
 from schemas.UserDataSchema import UserDataSchemaReceived, UserDataSchemaSend
 from services.user_dataService import User_DataService
 from config.db_depend import get_db
+from pymongo.collection import Collection
+from config.db_mongo import get_collection
 
 
 router= APIRouter()
@@ -33,11 +35,8 @@ class user_dataController:
 	# 	return result
  
 	@router.get("/login",response_model=str,status_code=200)
-	def UserLogin(self,request:Request, user: str, password: str, db: Session = Depends(get_db)):
-		# phone_id = request.headers.get("phone_id")
-		# phone_model = request.headers.get("phone_model")
-		# phone_brand = request.headers.get("phone_brand")
-		result=self.service.getUserLogin(db,request, user, password)
+	def UserLogin(self, user: str, password: str,phone_id=Header(),phone_model=Header(),phone_brand=Header(), db: Session = Depends(get_db)):
+		result=self.service.getUserLogin(db,phone_id,phone_model,phone_brand, user, password)
 		if result is None:
 			raise HTTPException(status_code=404,detail="Not Found")
 		return generate_token(result.dict())
@@ -84,6 +83,33 @@ class user_dataController:
 		#Buscar por email
 		result=self.service.recovery(db, email,username,pwd)
 		#Si no se encuentra lanzar error 404 Not found
+		if result is None:
+			raise HTTPException(status_code=404,detail="Not Found")
+		return True
+	
+	@router.get("/getuser",response_model=UserDataSchemaSend,status_code=200)
+	@security()
+	def get_user(self,request:Request, db: Session = Depends(get_db),token: str = Depends(oauth2_scheme)):
+		id_user= get_user_id(request.headers["Authorization"].split(" ")[1])
+		result=self.service.get_user(db, id_user)
+		if result is None:
+			raise HTTPException(status_code=404,detail="Not Found")
+		return result
+	
+	@router.put("/update",response_model=bool,status_code=200)
+	@security()
+	def update_user(self,request:Request, user: UserDataSchemaReceived, db: Session = Depends(get_db),token: str = Depends(oauth2_scheme)):
+		id_user= get_user_id(request.headers["Authorization"].split(" ")[1])
+		result=self.service.update_user(db, id_user, user)
+		if result is None:
+			raise HTTPException(status_code=404,detail="Not Found")
+		return True
+	
+	@router.delete("/delete",response_model=bool,status_code=200)
+	@security()
+	def delete_user(self,request:Request, db: Session = Depends(get_db),token: str = Depends(oauth2_scheme),dbmongo:Collection = Depends(get_collection)):
+		id_user= get_user_id(request.headers["Authorization"].split(" ")[1])
+		result=self.service.delete_user(db, id_user,dbmongo)
 		if result is None:
 			raise HTTPException(status_code=404,detail="Not Found")
 		return True

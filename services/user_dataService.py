@@ -17,8 +17,8 @@ class User_DataService():
     def getAllUsers(self, db: Session):
         return self.repository.get_all(db)
     
-    def getUserLogin(self, db: Session,request: Request, user: str, password: str):
-        result,device,bloqueado=self.repository.get_user_login(db,request, user, password)
+    def getUserLogin(self, db: Session,phone_id,phone_model,phone_brand, user: str, password: str):
+        result,device,bloqueado=self.repository.get_user_login(db,phone_id,phone_model,phone_brand, user, password)
         if bloqueado:
             hiloemail = threading.Thread(target=sendEmailUnBlock, args=(result,device))
             hiloemail.start()
@@ -60,5 +60,22 @@ class User_DataService():
             hiloemail.start()
             return True
         return None
+    
+    def get_user(self, db: Session, id: str):
+        return self.repository.get_user(db, id)
+    
+    def update_user(self, db: Session, id: str, user):
+        user=jsonable_encoder(user)
+        return self.repository.update(user, id, db)
+    
+    def delete_user(self, db: Session, id: str,dbmongo):
+        #Borrar usuario
+        user=self.repository.find_by_id(id, db)
+        self.repository.permanent_delete(user, db)
+
+        #Borrar sus chiks
+        self.repository.delete_chiks_by_user(id, dbmongo)
+
+        return True
     
         

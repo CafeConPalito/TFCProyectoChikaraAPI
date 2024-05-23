@@ -24,9 +24,9 @@ class UserDataSchemaReceived(BaseModel):
 	pwd: str
 	first_name: str
 	first_last_name: str
-	second_last_name: Optional[str]
+	second_last_name: Optional[str]=None
 	birthdate: date
-	is_premium: Optional[bool]
+	is_premium: Optional[bool]=None
 	
 	class Config:
 		orm_mode = True

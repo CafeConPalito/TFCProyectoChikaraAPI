@@ -12,21 +12,18 @@ from loguru import logger as Logger
 from schemas.chiksSchema import Comment, chiksSchema
 
 
-class chiksService():
+class ChiksService():
 
     def __init__(self):
         self.repository = chiksRepository()
-    
-    # def getAllChiks(self, db: Collection):
-    #     return self.repository.get_all(db)
-    
-    def getTopChiks(self, db: Collection):
+
+    def get_top_chiks(self, db: Collection):
         return self.repository.get_top_chiks(db)
     
-    def getChikByAuthor(self, db: Collection, id: str):
+    def get_chik_by_author(self, db: Collection, id: str):
         return self.repository.get_chik_by_author(db, id)
     
-    def uploadChik(self, db: Collection, chik:chiksSchema):
+    def upload_chik(self, db: Collection, chik:chiksSchema):
         load_dotenv()
         STORAGE_URL = os.getenv("STORAGE_URL")
         #Generar un id unico
@@ -54,20 +51,29 @@ class chiksService():
         
         return db.find_one({"_id":chik.id})
     
-    def addComment(self, db: Collection, id:str,user_id:str, comment:Comment):
+    def add_comment(self, db: Collection, id:str,user_id:str, comment:Comment):
         comment.user=user_id
         comment.date=str(datetime.now().date())
         db.update_one({"_id":id}, {"$push": {"comments": comment.dict()}})
         return db.find_one({"_id":id})
     
-    def addMencion(self, db: Collection, id:str, mencion:str):
+    def add_mencion(self, db: Collection, id:str, mencion:str):
         db.update_one({"_id":id}, {"$push": {"mencions": mencion}})
         return db.find_one({"_id":id})
     
-    def addLike(self, db: Collection, id:str):
+    def add_like(self, db: Collection, id:str):
         db.update_one({"_id":id}, {"$inc": {"likes": 1}})
         return db.find_one({"_id":id})
     
-    def deleteLike(self, db: Collection, id:str):
+    def delete_like(self, db: Collection, id:str):
         db.update_one({"_id":id}, {"$inc": {"likes": -1}})
         return db.find_one({"_id":id})
+    
+    def search_chiks(self, db: Collection, text:str):
+        return self.repository.search_chiks(db, text)
+    
+    def get_chik_by_id(self, db: Collection, id:str):
+        return db.find_one({"_id":id})
+    
+    def delete_chik(self, db: Collection, id:str):
+        return db.delete_one({"_id":id})

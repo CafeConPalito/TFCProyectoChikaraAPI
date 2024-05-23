@@ -1,9 +1,10 @@
 from functools import wraps
-
+from fastapi.security import HTTPBearer
 from config.jwt import validate_token
 
+oauth2_scheme = HTTPBearer()
 
-def Security(required_roles: list= None):
+def security(required_roles: list= None):
     def decorator(func):
         @wraps(func)
         async def wrapper(*args, **kwargs):

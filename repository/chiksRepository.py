@@ -13,3 +13,11 @@ class chiksRepository():
     
     def get_chik_by_author(self, db, id):
         return db.find({"author": id})
+    
+    def search_chiks(self, db, query:str):
+        return db.find({
+            "$or": [
+                {"titulo": {"$regex": query, "$options": "i"}},
+                {"contenido": {"$regex": query, "$options": "i"}}
+            ]
+        })

@@ -16,7 +16,7 @@ class User_DataRepository(AbstractRepository):
         self.user_devicesRepository = user_devicesRepository()
 
     # Sin cifrar a md5 la password
-    def get_user_login(self, db,request: Request, user: str, password: str):
+    def get_user_login(self, db,phone_id,phone_model,phone_brand, user: str, password: str):
         result = None
         device = None
         
@@ -29,12 +29,12 @@ class User_DataRepository(AbstractRepository):
                 self.user_logRepository.add(userlognew,db)
 
                 #Comprueba si el phone_id no está en la tabla user_devices
-                device_db=db.query(user_devices).filter(user_devices.phone_id == request.headers.get("phone_id")).filter(user_devices.id_user==result.id).first()
+                device_db=db.query(user_devices).filter(user_devices.phone_id == phone_id).filter(user_devices.id_user==result.id).first()
 
                 if device_db is None:
                     #Crea un nuevo objeto user_devices con el phone_id y el id del usuario
-                    userdevicesnew=user_devices(phone_id=request.headers.get("phone_id"),id_user=result.id,
-                                                phone_model=request.headers.get("phone_model"),phone_brand=request.headers.get("phone_brand"))
+                    userdevicesnew=user_devices(phone_id=phone_id,id_user=result.id,
+                                                phone_model=phone_model,phone_brand=phone_brand)
                     #Añade un nuevo registro en la tabla user_devices
                     device=self.user_devicesRepository.add(userdevicesnew,db)
                     return result,device,False
@@ -55,12 +55,12 @@ class User_DataRepository(AbstractRepository):
                 self.user_logRepository.add(userlognew,db)
 
                 #Comprueba si el phone_id no está en la tabla user_devices
-                device_db=db.query(user_devices).filter(user_devices.phone_id == request.headers.get("phone_id")).filter(user_devices.id_user==result.id).first()
+                device_db=db.query(user_devices).filter(user_devices.phone_id == phone_id).filter(user_devices.id_user==result.id).first()
 
                 if device_db is None:
                     #Crea un nuevo objeto user_devices con el phone_id y el id del usuario
-                    userdevicesnew=user_devices(phone_id=request.headers.get("phone_id"),id_user=result.id,
-                                                phone_model=request.headers.get("phone_model"),phone_brand=request.headers.get("phone_brand"))
+                    userdevicesnew=user_devices(phone_id=phone_id,id_user=result.id,
+                                                phone_model=phone_model,phone_brand=phone_brand)
                     #Añade un nuevo registro en la tabla user_devices
                     device=self.user_devicesRepository.add(userdevicesnew,db)
                     return result,device
@@ -79,11 +79,8 @@ class User_DataRepository(AbstractRepository):
     def find_user_by_name(self, db, user: str):
         return db.query(self.entity).filter(self.entity.user_name == user).first()
     
-    # Con cifrado md5 en la password
-    # No olvidar descomentar la importación de hashlib
+    def get_user(self, db, id: str):
+        return db.query(self.entity).filter(self.entity.id == id).first()
     
-    # def get_user_by_email(self, db, email: str, password: str):
-    #     if email[0]=="@": #if email starts with @, it is a username
-    #         return db.query(self.entity).filter(self.entity.user_name == email, self.entity.pwd == hashlib.md5(password.encode()).hexdigest()).first()
-    #     return db.query(self.entity).filter(self.entity.email == email, self.entity.pwd == hashlib.md5(password.encode()).hexdigest()).first()
-    
+    def delete_chiks_by_user(self, id, dbmongo):
+        return dbmongo.delete_many({"author":id})
