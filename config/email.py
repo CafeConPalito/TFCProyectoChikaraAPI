@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 
 from models.user_data import user_data
 from models.user_devices import user_devices
+from loguru import logger
 
 load_dotenv()
 
@@ -36,6 +37,7 @@ def sendEmailBlock(result,device: user_devices):
     }
     poller = email.begin_send(message)
     resultemail = poller.result()
+    logger.info(resultemail)
 
 
 def sendEmailUnBlock(result,device: user_devices):
@@ -65,6 +67,7 @@ def sendEmailUnBlock(result,device: user_devices):
     }
     poller = email.begin_send(message)
     resultemail = poller.result()
+    logger.info(resultemail)
 
 def sendEmailWelcome(useremail:str,user_name:str):
     email = EmailClient.from_connection_string(os.getenv('connection_string'))
@@ -85,6 +88,7 @@ def sendEmailWelcome(useremail:str,user_name:str):
     }
     poller = email.begin_send(message)
     resultemail = poller.result()
+    logger.info(resultemail)
 
 def sendEmailRecovery(useremail:str,user_name:str):
     email = EmailClient.from_connection_string(os.getenv('connection_string'))
@@ -104,6 +108,7 @@ def sendEmailRecovery(useremail:str,user_name:str):
     }
     poller = email.begin_send(message)
     resultemail = poller.result()
+    logger.info(resultemail)
 
 def sendEmailBirthday(useremail:str,user_name:str):
     email= EmailClient.from_connection_string(os.getenv('connection_string'))
@@ -123,3 +128,47 @@ def sendEmailBirthday(useremail:str,user_name:str):
     }
     poller = email.begin_send(message)
     resultemail = poller.result()
+    logger.info(resultemail)
+
+def send_email_motivacion_day(user_email:str,user_name:str,title:str):
+    email= EmailClient.from_connection_string(os.getenv('connection_string'))
+
+    message = {
+    "senderAddress": os.getenv('email'),
+    "recipients":  {
+    "to": [{"address": user_email }],
+    },
+    "content": {
+    "subject": f"Enhorabuena {user_name}",
+    "html": "<html><head></head><body><h1>Enhorabuena</h1><br><h2>Hola "+user_name+",</h2><br>"+
+    "<p>Desde CafeConPalito queremos felicitarte por tu esfuerzo.</p>"+
+    "<p>Has completado un dia con la motivación "+title+" </p>"+
+    "<p>Esperamos que sigas con la misma fuerza en los siguientes días.</p>"+
+    "<p>Un saludo.</p><br><p>Este es un mensaje automático. Por favor, no responder a este correo electrónico.</p></body></html>"
+    }
+    }
+    poller = email.begin_send(message)
+    resultemail = poller.result()
+    logger.info(resultemail)
+
+def send_email_motivacion_days(user_email:str,user_name:str,title:str):
+    email= EmailClient.from_connection_string(os.getenv('connection_string'))
+
+    message = {
+    "senderAddress": os.getenv('email'),
+    "recipients":  {
+    "to": [{"address": user_email }],
+    },
+    "content": {
+    "subject": f"Enhorabuena {user_name}",
+    "html": "<html><head></head><body><h1>Enhorabuena</h1><br><h2>Hola "+user_name+",</h2><br>"+
+    "<p>Desde CafeConPalito queremos felicitarte por tu esfuerzo y tu constancia</p>"+
+    "<p>Has completado 21 días con la motivación "+title+" </p>"+
+    "<p>Acabas de transformar un hábito en una rutina.</p>"+
+    "<p>Esperamos que sigas con la misma fuerza en los siguientes días.</p>"+
+    "<p>Un saludo.</p><br><p>Este es un mensaje automático. Por favor, no responder a este correo electrónico.</p></body></html>"
+    }
+    }
+    poller = email.begin_send(message)
+    resultemail = poller.result()
+    logger.info(resultemail)
