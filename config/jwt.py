@@ -25,12 +25,16 @@ def validate_token(token, output=False):
         if output:
             return decode(token, key=config('KEY'), algorithms=["HS256"])
         decode(token, key=config('KEY'), algorithms=["HS256"])
+    except exceptions.InvalidSignatureError:
+        return JSONResponse(content={"message": "Invalid Token"},
+                            status_code=401)
     except exceptions.DecodeError:
         return JSONResponse(content={"message": "Invalid Token"},
                             status_code=401)
     except exceptions.ExpiredSignatureError:
         return JSONResponse(content={"message": "Token Expired"},
                             status_code=401)
+    
     
 def get_user_id(token):
     return validate_token(token, True)["id_user"]

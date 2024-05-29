@@ -63,7 +63,7 @@ class User_DataRepository(AbstractRepository):
                                                 phone_model=phone_model,phone_brand=phone_brand)
                     #Añade un nuevo registro en la tabla user_devices
                     device=self.user_devicesRepository.add(userdevicesnew,db)
-                    return result,device
+                    return result,device,False
                 else:
                     #Comprueba si el dispositivo está bloqueado
                     if device_db.block==True:

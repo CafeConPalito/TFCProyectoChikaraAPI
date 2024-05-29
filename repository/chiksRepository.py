@@ -16,8 +16,8 @@ class chiksRepository():
     
     def search_chiks(self, db, query:str):
         return db.find({
-            "$or": [
+            "$and": [
                 {"titulo": {"$regex": query, "$options": "i"}},
-                {"contenido": {"$regex": query, "$options": "i"}}
+                {"isprivate": False}
             ]
         })
