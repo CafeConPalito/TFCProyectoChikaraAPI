@@ -11,7 +11,7 @@ from config.jwt import get_user_id
 from decorators.decorator import security, oauth2_scheme
 from middlewares.verify_token_route import VerifyTokenRoute
 from schemas.chiksSchema import Comment, chiksSchema
-from services.ChiksService import ChiksService
+from services.chiksService import ChiksService
 
 router= APIRouter()
 

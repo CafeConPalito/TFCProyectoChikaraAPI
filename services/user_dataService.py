@@ -48,6 +48,19 @@ class User_DataService():
         except:
             return None
         
+    def add_user(self, db: Session, user,pwd:str):
+        user_in_data= jsonable_encoder(user)
+        newuser =user_data(**user_in_data)
+        newuser.pwd=pwd
+        try:
+            result= self.repository.add(newuser, db)
+            if result:
+                hiloemail = threading.Thread(target=sendEmailWelcome, args=(newuser.email,newuser.user_name))
+                hiloemail.start()
+            return True
+        except:
+            return None
+        
     def recovery(self,db:Session, email:str,username:str,pwd:str):
         result=self.repository.find_user_by_email(db, email)
         #Compruebo que el email y el username coinciden
@@ -66,6 +79,12 @@ class User_DataService():
     
     def update_user(self, db: Session, id: str, user):
         user=jsonable_encoder(user)
+        return self.repository.update(user, id, db)
+    
+    def update_user_good(self, db: Session, id: str, user,pwd:str):
+        user=jsonable_encoder(user)
+        # user.append({"pwd":pwd})
+        user["pwd"]=pwd
         return self.repository.update(user, id, db)
     
     def delete_user(self, db: Session, id: str,dbmongo):

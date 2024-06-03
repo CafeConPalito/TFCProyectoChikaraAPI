@@ -78,6 +78,14 @@ class user_dataController:
 			raise HTTPException(status_code=400,detail="Not Created")
 		return True
 	
+	@router.post("/registergood",response_model=bool,status_code=201)
+	def user_register(self, user: UserDataSchemaReceived,pwd=Header(), db: Session = Depends(get_db)):
+		
+		result= self.service.add_user(db, user)
+		if result is None:
+			raise HTTPException(status_code=400,detail="Not Created")
+		return True
+	
 	@router.put("/recovery",response_model=bool,status_code=200)
 	def recovery(self,email:str,username:str,pwd:str, db: Session = Depends(get_db)):
 		#Buscar por email
@@ -101,6 +109,15 @@ class user_dataController:
 	def update_user(self,request:Request, user: UserDataSchemaReceived, db: Session = Depends(get_db),token: str = Depends(oauth2_scheme)):
 		id_user= get_user_id(request.headers["Authorization"].split(" ")[1])
 		result=self.service.update_user(db, id_user, user)
+		if result is None:
+			raise HTTPException(status_code=404,detail="Not Found")
+		return True
+	
+	@router.put("/updategood",response_model=bool,status_code=200)
+	@security()
+	def update_user_good(self,request:Request, user: UserDataSchemaReceived,pwd=Header(), db: Session = Depends(get_db),token: str = Depends(oauth2_scheme)):
+		id_user= get_user_id(request.headers["Authorization"].split(" ")[1])
+		result=self.service.update_user_good(db, id_user, user,pwd)
 		if result is None:
 			raise HTTPException(status_code=404,detail="Not Found")
 		return True
