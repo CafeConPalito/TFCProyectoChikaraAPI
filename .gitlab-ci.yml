@@ -1,7 +1,6 @@
 image: docker:latest
 stages:
   - build
-  - publish
 
 variables:
   DOCKER_IMAGE_NAME: chikara
@@ -19,12 +18,6 @@ build:
     - docker build -t $DOCKER_IMAGE_NAME .
     - docker login $AZURE_REGISTRY -u $AZURE_REGISTRY_USERNAME -p $AZURE_REGISTRY_PASSWORD
     - docker tag $DOCKER_IMAGE_NAME:latest $AZURE_REGISTRY/$DOCKER_IMAGE_NAME:latest
-  only:
-    - main
-
-publish:
-  stage: publish
-  script:
     - docker push $AZURE_REGISTRY/$DOCKER_IMAGE_NAME:latest
   only:
     - main
