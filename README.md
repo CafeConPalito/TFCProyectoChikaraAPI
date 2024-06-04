@@ -18,9 +18,14 @@ To get started with the TFGProyectoChikaraAPI project, follow these steps:
     ```
 2. Create a virtual environment:
 
+    Windows
     ```shell
     virtualenv .chikaraVenv
     ```
+   MacOs | Linux
+   ```shell
+    python3 -m venv .chikaraVenv
+   ```
 3. Activate the virtual environment(Windows):
 
     Windows
@@ -36,12 +41,52 @@ To get started with the TFGProyectoChikaraAPI project, follow these steps:
 
 4. Install the required dependencies:
 
+    Windows
     ```shell
     pip install -r requirements.txt
     ```
+    MacOs | Linux
 
-5. Start the APIREST:
+    ```shell
+    pip3 install -r requirements.txt
+    ```
+
+5. Create a .env file in the root directory of the project and add the following parameters:
+
+    ```
+    # Variables de PostgreSQL
+    DB_HOST=localhost
+    DB_PORT=3306
+    DB_NAME=chikara
+    DB_USER={user}
+    DB_PASSWORD={password}
+
+    # Variables de mongodb
+    DB_USER_MONGO = {user}
+    DB_PASSWORD_MONGO= {password}
+    DB_CLUSTER = {url}
+    DB_NAME_MONGO = ChikaraDB
+    DB_COLLECTION = chiks
+
+    # Variable jwt
+    KEY=cafeconpalito
+    EXPIRE_TIME=1
+
+    # Variables de correo
+    connection_string={url_connection}
+    email={email}
+    url={url_web_app}
+
+    # Variables Blob Storage
+    STORAGE_CONTAINER="chiks"
+    STORAGE_URL={url}
+    STORAGE_CONNECTION_STRING={url_connection}
+    ```
+
+6. Start the APIREST:
 
     ```shell
     uvicorn main:app --reload
     ```
+
+

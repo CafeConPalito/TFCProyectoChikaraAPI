@@ -9,7 +9,7 @@
 logs/
 
 # Ignore pycache
-/__pycache__
+*__pycache__
 
 # Ignore virtual environment
 .chikaraVenv/
