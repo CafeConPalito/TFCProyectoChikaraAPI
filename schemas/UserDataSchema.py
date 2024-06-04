@@ -7,6 +7,7 @@ class UserDataSchemaSend(BaseModel):
 	id: Optional[uuid.UUID]
 	user_name: Optional[str]
 	email: Optional[str]
+	pwd: Optional[str]
 	first_name: Optional[str]
 	first_last_name: Optional[str]
 	second_last_name: Optional[str]
