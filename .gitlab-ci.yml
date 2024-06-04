@@ -10,7 +10,7 @@ build:
   script:
     - curl --silent "https://gitlab.com/gitlab-org/incubation-engineering/mobile-devops/download-secure-files/-/raw/main/installer" | bash
     - ls -lah .secure_files
-    - cp ./.secure_files/.env.dev .env
+    - cp ./.secure_files/.env .env
     - docker build -t $DOCKER_IMAGE_NAME .
     - docker login $AZURE_REGISTRY -u $AZURE_REGISTRY_USERNAME -p $AZURE_REGISTRY_PASSWORD
     - docker tag $DOCKER_IMAGE_NAME:latest $AZURE_REGISTRY/$DOCKER_IMAGE_NAME:latest
