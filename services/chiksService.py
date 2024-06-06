@@ -5,11 +5,13 @@ import uuid
 from dotenv import load_dotenv
 from fastapi.encoders import jsonable_encoder
 from config.blob import upload_blob
+from models.user_data import user_data
 from repository.chiksRepository import chiksRepository
 from pymongo.collection import Collection
 from loguru import logger as Logger
 
 from schemas.chiksSchema import Comment, chiksSchema
+from sqlalchemy.orm import Session
 
 
 class ChiksService():
@@ -23,7 +25,7 @@ class ChiksService():
     def get_chik_by_author(self, db: Collection, id: str):
         return self.repository.get_chik_by_author(db, id)
     
-    def upload_chik(self, db: Collection, chik:chiksSchema):
+    def upload_chik(self, db: Collection,db2: Session, chik:chiksSchema):
         load_dotenv()
         STORAGE_URL = os.getenv("STORAGE_URL")
         #Generar un id unico
@@ -32,6 +34,8 @@ class ChiksService():
         chik.date=datetime.now().date()
         #Poner el contador de likes en 0
         chik.likes=0
+        chik.author_name=db2.query(user_data).filter(user_data.id==chik.author).first().username
+        #Insertar el chik en la base de datos
         Logger.info(chik)
         for content in chik.content:
             if content.type=="TYPE_IMG":
