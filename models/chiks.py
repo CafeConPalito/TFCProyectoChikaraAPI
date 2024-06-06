@@ -17,6 +17,7 @@ class Chiks(BaseModel):
     _id: str
     title: str
     author: uuid.UUID
+    author_name: str
     date: date
     likes: int
     isprivate: str

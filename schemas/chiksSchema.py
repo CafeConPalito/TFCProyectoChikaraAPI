@@ -18,6 +18,7 @@ class chiksSchema(BaseModel):
     id: str = Field(..., alias="_id")
     title: str
     author: Optional[str]=None
+    author_name: Optional[str]=None
     date: Optional[str]=None
     likes: Optional[int]
     isprivate: bool

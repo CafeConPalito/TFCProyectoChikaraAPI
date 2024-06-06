@@ -13,6 +13,9 @@ from middlewares.verify_token_route import VerifyTokenRoute
 from schemas.chiksSchema import Comment, chiksSchema
 from services.chiksService import ChiksService
 
+from sqlalchemy.orm import Session
+from config.db_depend import get_db
+
 router= APIRouter()
 
 @cbv(router)
@@ -49,12 +52,12 @@ class ChiksController:
     
     @router.post("/create",response_model=chiksSchema,status_code=200)
     @security()
-    def createChik(self,request:Request,newchik:chiksSchema , db: Collection = Depends(get_collection),token: str = Depends(oauth2_scheme)):
+    def createChik(self,request:Request,newchik:chiksSchema , db: Collection = Depends(get_collection),token: str = Depends(oauth2_scheme),db2: Session = Depends(get_db)):
         #Insertar el id del usuario que esta creando el chik
         newchik.author= get_user_id(request.headers["Authorization"].split(" ")[1])
 
         #Con los datos del chik, se procede a insertar en Mongo Atlas
-        chiks=self.service.upload_chik(db, newchik)
+        chiks=self.service.upload_chik(db,db2, newchik)
 
         #Si se inserto correctamente, se retorna el chik creado
         if chiks:
