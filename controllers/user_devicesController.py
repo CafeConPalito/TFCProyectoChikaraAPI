@@ -21,15 +21,39 @@ class user_devicesController:
     def __init__(self):
         self.service =  User_DevicesService()
         
-    @router.get("/block/{id}",response_model=str,status_code=200)
+    @router.get("/block/{id}",response_model=str,status_code=200,summary="Bloquear dispositivo")
     def blockDevice(self,id:str, db: Session = Depends(get_db)):
+        """
+        # Bloquear dispositivo
+
+        ## Args:
+            id (query|str): Id del dispositivo
+        
+        ## Raises:
+            HTTPException(404): No se encontró el dispositivo
+        
+        ## Returns:
+            str: HTML de confirmación
+        """
         result=self.service.blockDevice(db,id)
         if result is None:
             raise HTTPException(status_code=404,detail="Not Found")
         return result
     
-    @router.get("/unblock/{id}",response_model=str,status_code=200)
+    @router.get("/unblock/{id}",response_model=str,status_code=200,summary="Desbloquear dispositivo")
     def unblockDevice(self,id:str, db: Session = Depends(get_db)):
+        """
+        # Desbloquear dispositivo
+
+        ## Args:
+            id (query|str): Id del dispositivo
+        
+        ## Raises:
+            HTTPException(404): No se encontró el dispositivo
+        
+        ## Returns:
+            str: HTML de confirmación
+        """
         result=self.service.unblockDevice(db,id)
         if result is None:
             raise HTTPException(status_code=404,detail="Not Found")
