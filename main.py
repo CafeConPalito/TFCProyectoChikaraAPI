@@ -10,7 +10,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 app = FastAPI(root_path="/api/v1")
 app.title = "Chikara API"
-app.version = "0.7.9"
+app.version = "1.0.0"
 app.description = "API REST para el manejo de usuarios y chiks en la aplicación multiplataforma Chikara"
 
 startLogger()
