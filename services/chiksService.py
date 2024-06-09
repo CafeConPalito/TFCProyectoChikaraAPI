@@ -34,7 +34,7 @@ class ChiksService():
         chik.date=datetime.now().date()
         #Poner el contador de likes en 0
         chik.likes=0
-        chik.author_name=db2.query(user_data).filter(user_data.id==chik.author).first().username
+        chik.author_name=db2.query(user_data).filter(user_data.id==chik.author).first().user_name
         #Insertar el chik en la base de datos
         Logger.info(chik)
         for content in chik.content:
